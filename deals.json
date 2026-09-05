@@ -1,0 +1,38 @@
+[
+  {
+    "brand": "Amazon Shopping",
+    "category": "E-Commerce",
+    "gyftr_discount": "2.0%",
+    "zave_discount": "2.5%",
+    "best_deal": "2.5% Instant Off",
+    "coupon_code": "SAVEBIG",
+    "link": "https://www.amazon.in"
+  },
+  {
+    "brand": "Swiggy Money",
+    "category": "Food & Grocery",
+    "gyftr_discount": "4.0%",
+    "zave_discount": "5.0%",
+    "best_deal": "5.0% Voucher Off",
+    "coupon_code": "SWIGGY100",
+    "link": "https://www.swiggy.com"
+  },
+  {
+    "brand": "Flipkart",
+    "category": "E-Commerce",
+    "gyftr_discount": "1.5%",
+    "zave_discount": "2.0%",
+    "best_deal": "2.0% Flat Off",
+    "coupon_code": "FKFIRST",
+    "link": "https://www.flipkart.com"
+  },
+  {
+    "brand": "Zomato",
+    "category": "Food & Dining",
+    "gyftr_discount": "5.0%",
+    "zave_discount": "6.0%",
+    "best_deal": "6.0% Instant Off",
+    "coupon_code": "TASTY",
+    "link": "https://www.zomato.com"
+  }
+]
