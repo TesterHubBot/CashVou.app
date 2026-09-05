@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartSaver | Deal & Voucher Aggregator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+
+  <!-- Top Navigation -->
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-400 text-2xl font-bold tracking-tight">SmartSaver</span>
+        <span class="text-xs bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20">All-in-One</span>
+      </div>
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search brand (Amazon, Swiggy, Zepto)..." 
+        class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 w-full md:w-80 text-sm focus:outline-none focus:border-amber-400 text-white"
+        onkeyup="filterDeals()"
+      >
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold">Best Deals, Vouchers & Coupons</h1>
+      <p class="text-slate-400 text-sm mt-1">Aggregated rates compared across Gyftr, Zave & CashKaro style platforms.</p>
+    </div>
+
+    <!-- Deals Grid -->
+    <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Cards render automatically -->
+    </div>
+  </main>
+
+  <script>
+    let allDeals = [];
+
+    async function loadData() {
+      try {
+        const response = await fetch('./deals.json');
+        allDeals = await response.json();
+        renderDeals(allDeals);
+      } catch (err) {
+        console.error('Data load error:', err);
+      }
+    }
+
+    function renderDeals(deals) {
+      const grid = document.getElementById('cardsGrid');
+      grid.innerHTML = '';
+
+      if (deals.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12">No brands or coupons found.</div>`;
+        return;
+      }
+
+      deals.forEach(deal => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-slate-700 transition flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <h2 class="text-lg font-semibold text-white">${deal.brand}</h2>
+              <span class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded">${deal.category}</span>
+            </div>
+            
+            <!-- Comparison Table -->
+            <div class="bg-slate-950/60 rounded-lg p-3 my-3 border border-slate-800/80 text-xs">
+              <div class="flex justify-between py-1 border-b border-slate-800">
+                <span class="text-slate-400">Gyftr Rate:</span>
+                <span class="font-medium text-slate-200">${deal.gyftr_discount}</span>
+              </div>
+              <div class="flex justify-between py-1 border-b border-slate-800">
+                <span class="text-slate-400">Zave Rate:</span>
+                <span class="font-medium text-slate-200">${deal.zave_discount}</span>
+              </div>
+              <div class="flex justify-between pt-1 text-amber-400 font-bold">
+                <span>Best Margin:</span>
+                <span>${deal.best_deal}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs bg-slate-800/40 border border-dashed border-slate-700 rounded px-3 py-2 my-2">
+              <span class="text-slate-400 font-mono">Code: <strong class="text-amber-300">${deal.coupon_code}</strong></span>
+              <button onclick="navigator.clipboard.writeText('${deal.coupon_code}'); alert('Coupon copied!');" class="text-blue-400 hover:underline">Copy</button>
+            </div>
+          </div>
+
+          <a href="${deal.link}" target="_blank" class="mt-4 block w-full text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold py-2 rounded-lg text-sm transition">
+            Visit Store
+          </a>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterDeals() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allDeals.filter(d => 
+        d.brand.toLowerCase().includes(query) || 
+        d.category.toLowerCase().includes(query)
+      );
+      renderDeals(filtered);
+    }
+
+    window.onload = loadData;
+  </script>
+</body>
+</html>
